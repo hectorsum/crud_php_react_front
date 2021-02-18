@@ -33,7 +33,7 @@ function App() {
     await axios.get(url)
       .then(res => setData(res.data));
   } 
-  const postTasks = async() =>{
+  const postMethod = async() =>{
     let form = new FormData();
     form.append('title',taskSelected.title);
     form.append('description',taskSelected.description);
@@ -52,14 +52,14 @@ function App() {
     form.append("METHOD", "PUT");
     await axios.post(url, form, {params: {id: taskSelected.id}})
     .then(response=>{
-      var dataNueva = data;
-      dataNueva.map(task => {
+      var newData = data;
+      newData.map(task => {
         if(task.id===taskSelected.id){
           task.title=taskSelected.title;
           task.description=taskSelected.description;
         }
       });
-      setData(dataNueva);
+      setData(newData);
       handleOpenEdit();
     }).catch(error=> console.log(error));
   }
@@ -75,7 +75,7 @@ function App() {
   const handleOpenEdit=()=>{
     setModalEdit(!modalEdit);
   }
-  const seleccionarFramework=(framework, caso)=>{
+  const getSelectedTask=(framework, caso)=>{
     setTaskSelected(framework);
     (caso==="Editar") ? handleOpenEdit() : handleOpenDelete();
   }
@@ -107,10 +107,10 @@ function App() {
               <td>{task.description}</td>
               <td>{task.created_at}</td>
               <td>
-                <a href="#" class="btn btn-primary mr-2" onClick={()=>seleccionarFramework(task, "Editar")}>
+                <a href="#" class="btn btn-primary mr-2" onClick={()=>getSelectedTask(task, "Editar")}>
                   <i class="fas fa-marker"></i>
                 </a>
-                <a href="#" class="btn btn-danger" onClick={()=>seleccionarFramework(task, "Eliminar")}>
+                <a href="#" class="btn btn-danger" onClick={()=>getSelectedTask(task, "Eliminar")}>
                   <i class="fas fa-trash-alt"></i>
                 </a>
               </td>
@@ -131,7 +131,7 @@ function App() {
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={postTasks}>Insert</button>
+          <button className="btn btn-primary" onClick={postMethod}>Insert</button>
           <button className="btn btn-danger" onClick={handleOpen}>Cancel</button>
         </ModalFooter>
       </Modal>
